@@ -1,15 +1,7 @@
-package com.karoliny.Car.entity;
+package com.karoliny.Car.dto;
 
-import jakarta.persistence.*;
-import org.springframework.data.relational.core.mapping.Column;
+public class PersonDtoRequest {
 
-@Entity
-@Table(name = "cars")
-public class Person {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column("id_chassi")
     private Long idChassi;
 
     private String name;
@@ -58,16 +50,5 @@ public class Person {
 
     public void setFabricationYear(String fabricationYear) {
         this.fabricationYear = fabricationYear;
-    }
-
-    @Override
-    public String toString() {
-        return "Person{" +
-                "idChassi=" + idChassi +
-                ", name='" + name + '\'' +
-                ", brand='" + brand + '\'' +
-                ", color='" + color + '\'' +
-                ", fabricationYear='" + fabricationYear + '\'' +
-                '}';
     }
 }

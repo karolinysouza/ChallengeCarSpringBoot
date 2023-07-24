@@ -20,6 +20,17 @@ public class Person {
 
     private String fabricationYear;
 
+    public Person() {
+    }
+
+    public Person(Long idChassi, String name, String brand, String color, String fabricationYear) {
+        this.idChassi = idChassi;
+        this.name = name;
+        this.brand = brand;
+        this.color = color;
+        this.fabricationYear = fabricationYear;
+    }
+
     public Long getIdChassi() {
         return idChassi;
     }

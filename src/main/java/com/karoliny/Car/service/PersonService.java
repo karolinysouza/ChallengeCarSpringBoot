@@ -3,7 +3,8 @@ package com.karoliny.Car.service;
 import com.karoliny.Car.dto.PersonDtoRequest;
 import com.karoliny.Car.dto.PersonDtoResponse;
 import com.karoliny.Car.entity.Person;
-import com.karoliny.Car.exception.PersonNotFoundExeption;
+import com.karoliny.Car.exception.InvalidBrandException;
+import com.karoliny.Car.exception.CarNotFoundException;
 import com.karoliny.Car.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,16 +17,31 @@ public class PersonService {
     @Autowired
     PersonRepository personRepository;
 
-        public void registerDb(PersonDtoRequest personDtoRequest) {
+    public void registerDb(PersonDtoRequest personDtoRequest) {
+        String brand = personDtoRequest.getBrand();
+
+        if (!isValidBrand(brand)) {
+            throw new InvalidBrandException("Invalid brand! Valid brands are: Ford, Chevrolet, BMW, Volvo.");
+        }
 
         Person person = new Person(
                 null,
                 personDtoRequest.getName(),
-                personDtoRequest.getBrand(),
+                brand,
                 personDtoRequest.getColor(),
                 personDtoRequest.getFabricationYear());
         personRepository.save(person);
+    }
 
+    private boolean isValidBrand(String brand) {
+        String[] validBrands = {"Ford", "Chevrolet", "BMW", "Volvo"};
+
+        for (String validBrand : validBrands) {
+            if (validBrand.equalsIgnoreCase(brand)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public PersonDtoResponse getCarById(Long idChassi) {
@@ -43,7 +59,7 @@ public class PersonService {
 
             return personDtoResponse;
         } else {
-            throw new PersonNotFoundExeption("Car not found!");
+            throw new CarNotFoundException("Car not found, please check the ID!");
         }
     }
 }

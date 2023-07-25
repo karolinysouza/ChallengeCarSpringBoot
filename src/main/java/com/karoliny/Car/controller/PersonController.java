@@ -2,7 +2,8 @@ package com.karoliny.Car.controller;
 
 import com.karoliny.Car.dto.PersonDtoRequest;
 import com.karoliny.Car.dto.PersonDtoResponse;
-import com.karoliny.Car.exception.PersonNotFoundExeption;
+import com.karoliny.Car.exception.InvalidBrandException;
+import com.karoliny.Car.exception.CarNotFoundException;
 import com.karoliny.Car.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,9 +19,13 @@ public class PersonController {
     PersonService personService;
 
     @PostMapping("/post")
-    public String post(@RequestBody PersonDtoRequest personDtoRequest){
-        personService.registerDb(personDtoRequest);
-        return "Salvo com Sucesso";
+    public ResponseEntity<String> post(@RequestBody PersonDtoRequest personDtoRequest){
+        try {
+            personService.registerDb(personDtoRequest);
+            return ResponseEntity.ok("Successfully saved!");
+        } catch (InvalidBrandException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @GetMapping("/get/{idChassi}")
@@ -28,7 +33,7 @@ public class PersonController {
         try {
             PersonDtoResponse car = personService.getCarById(idChassi);
             return ResponseEntity.ok(car);
-        } catch (PersonNotFoundExeption e) {
+        } catch (CarNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }

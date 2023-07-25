@@ -4,6 +4,7 @@ import com.karoliny.Car.dto.PersonDtoRequest;
 import com.karoliny.Car.dto.PersonDtoResponse;
 import com.karoliny.Car.exception.InvalidBrandException;
 import com.karoliny.Car.exception.CarNotFoundException;
+import com.karoliny.Car.exception.MissingRequiredFieldException;
 import com.karoliny.Car.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,7 +24,7 @@ public class PersonController {
         try {
             personService.registerDb(personDtoRequest);
             return ResponseEntity.ok("Successfully saved!");
-        } catch (InvalidBrandException e) {
+        } catch (MissingRequiredFieldException | InvalidBrandException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
